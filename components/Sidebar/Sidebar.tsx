@@ -23,7 +23,7 @@ import {
   MousePointerClick,
 } from "lucide-react";
 import { useSidebar } from "./use-sidebar";
-import { cn } from "@/app/libs/utlis";
+import { cn } from "@/app/dashboard/libs/utlis";
 import MenuItem from "./MenuItem";
 import LinkItem from "./LinkItem";
 import ExpandMenu from "./ExpandMenu";

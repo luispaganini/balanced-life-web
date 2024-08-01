@@ -78,7 +78,7 @@ const SignIn: React.FC = () => {
 
                 authStore.setToken(response.accessToken);
                 authStore.setRefreshToken(response.refreshToken);
-                router.push("/home");
+                router.push("/dashboard");
 
             } else {
                 alert("Usuário ou senha inválidos.");
@@ -99,82 +99,83 @@ const SignIn: React.FC = () => {
     ];
 
     return (
-        <div className="bg-cyan-bg">
-            <div className="w-6/12 m-auto pt-20 pb-20">
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-20 mb-20">
-                    <div className="w-full xl:w-3/4 m-auto p-4 sm:p-12.5 xl:p-17.5">
-                        <div className="flex items-center justify-center">
-                            <div className="flex-col items-center flex">
-                                <Image
-                                    width={150}
-                                    height={50}
-                                    src="/images/logo/logo-icon.png"
-                                    alt="Logo"
+        <div className="bg-cyan-bg min-h-screen flex items-center justify-center">
+            <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+                <div className="text-center mb-6">
+                    <Image
+                        width={150}
+                        height={50}
+                        src="/images/logo/logo-icon.png"
+                        alt="Logo"
+                        className="mx-auto"
+                    />
+                    <h2 className="text-2xl font-bold text-black mb-2">Login</h2>
+                </div>
+
+                <form onSubmit={handleSubmit}>
+                    {inputs.map((input) => (
+                        <div key={input.name} className="mb-4">
+                            <label
+                                htmlFor={input.name}
+                                className="block text-sm font-medium text-gray-700"
+                            >
+                                {input.label}
+                            </label>
+                            <div className="relative mt-1">
+                                <input
+                                    type={input.type}
+                                    placeholder={input.placeholder}
+                                    name={input.name}
+                                    id={input.name}
+                                    value={formData[input.name as keyof typeof formData]}
+                                    onChange={handleChange}
+                                    className={`w-full px-4 py-2 border rounded-lg ${errors[input.name] ? 'border-red-500' : 'border-gray-300'} focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500`}
+                                    aria-invalid={errors[input.name] ? "true" : "false"}
+                                    aria-describedby={`${input.name}-error`}
                                 />
-                                <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                                    Login
-                                </h2>
+                                {errors[input.name] && (
+                                    <p id={`${input.name}-error`} className="text-red-500 text-xs mt-1">
+                                        {errors[input.name]}
+                                    </p>
+                                )}
+                                <span className="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    {React.createElement(input.icon, { className: "h-5 w-5 text-gray-500" })}
+                                </span>
                             </div>
                         </div>
+                    ))}
 
-                        <form onSubmit={handleSubmit}>
-                            {inputs.map((input) => (
-                                <div key={input.name} className="mb-4">
-                                    <label
-                                        htmlFor={input.name}
-                                        className="mb-2.5 block font-medium text-black dark:text-white"
-                                    >
-                                        {input.label}
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type={input.type}
-                                            placeholder={input.placeholder}
-                                            name={input.name}
-                                            id={input.name}
-                                            value={formData[input.name as keyof typeof formData]}
-                                            onChange={handleChange}
-                                            className={`w-full rounded-lg border ${errors[input.name] ? 'border-red-500' : 'border-stroke'} bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary`}
-                                            aria-invalid={errors[input.name] ? "true" : "false"}
-                                            aria-describedby={`${input.name}-error`}
-                                        />
-                                        {errors[input.name] && (
-                                            <p id={`${input.name}-error`} className="text-red-500 text-sm mt-1">
-                                                {errors[input.name]}
-                                            </p>
-                                        )}
-                                        <span className="absolute right-4 top-4 text-stroke">
-                                            {React.createElement(input.icon, { className: "h-6 w-6 text-stroke" })}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-
-                            <div className="mb-5">
-                                <button
-                                    type="submit"
-                                    className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 flex items-center justify-center"
-                                    disabled={loading}
-                                >
-                                    {loading ? (
-                                        <CircularProgress size={24} className="text-white" />
-                                    ) : (
-                                        "Entrar"
-                                    )}
-                                </button>
-                            </div>
-
-                            <div className="mt-6 text-center">
-                                <p>
-                                    Ainda não é cadastrado?{" "}
-                                    <Link href="/auth/signup" className="text-primary">
-                                        Cadastrar
-                                    </Link>
-                                </p>
-                            </div>
-                        </form>
+                    <div className="mb-5">
+                        <button
+                            type="submit"
+                            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <CircularProgress size={24} className="text-white" />
+                            ) : (
+                                "Entrar"
+                            )}
+                        </button>
                     </div>
-                </div>
+
+                    <div className="text-center text-sm text-gray-500">
+                        <p>
+                            Esqueceu sua senha?{" "}
+                            <Link href="/auth/reset-password" className="text-indigo-500 hover:underline">
+                                Recuperar senha
+                            </Link>
+                        </p>
+                        <br />
+                        <p>
+                            Ainda não tem uma conta?{" "}
+                            <Link href="/auth/signup" className="text-indigo-500 hover:underline">
+                                Criar conta
+                            </Link>
+                        </p>
+                    </div>
+
+                </form>
             </div>
         </div>
     );

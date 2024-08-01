@@ -3,7 +3,7 @@ import Link from "next/link";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { usePathname } from "next/navigation";
 import { LineChartIcon } from "lucide-react";
-import { cn } from "@/app/libs/utlis";
+import { cn } from "@/app/dashboard/libs/utlis";
 import { useSidebar } from "./use-sidebar";
 
 export type Props = {

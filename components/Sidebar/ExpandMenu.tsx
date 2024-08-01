@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { ChevronRight, HomeIcon } from "lucide-react";
-import { cn } from "@/app/libs/utlis";
+import { cn } from "@/app/dashboard/libs/utlis";
 import LinkItem from "./LinkItem";
 
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";

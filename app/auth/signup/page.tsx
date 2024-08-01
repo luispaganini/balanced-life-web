@@ -5,7 +5,7 @@ import Link from "next/link";
 import { UserIcon, LockClosedIcon, EnvelopeIcon, PhoneIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import Image from "next/image";
 import { formatCPF, formatPhoneNumber, validateCPF } from "@/utils/User/user";
-import { TextField, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, InputAdornment, IconButton } from '@mui/material';
+import { TextField, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel } from '@mui/material';
 import { createAccount } from "@/services/login/login";
 import { useRouter } from "next/navigation";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -15,7 +15,6 @@ import { getCurrentDate } from "@/utils/Date/date";
 const SignUp: React.FC = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    // Estado para armazenar os valores dos inputs
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -27,10 +26,8 @@ const SignUp: React.FC = () => {
         gender: ""
     });
 
-    // Estado para armazenar os erros de validação
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-    // Atualiza o estado do formulário quando um input muda
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === "cpf") {
@@ -51,7 +48,6 @@ const SignUp: React.FC = () => {
         }
     };
 
-    // Função de validação
     const validateForm = () => {
         const { name, email, cpf, password, confirmPassword, phoneNumber, birth, gender } = formData;
         const newErrors: { [key: string]: string } = {};
@@ -76,7 +72,6 @@ const SignUp: React.FC = () => {
         return newErrors;
     };
 
-    // Valida os inputs e exibe erros se necessário
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const validationErrors = validateForm();
@@ -121,7 +116,6 @@ const SignUp: React.FC = () => {
             setLoading(false);
         }
 
-        // Exibe os valores no console se todos os campos forem válidos
         console.log("Form Data:", formData);
     };
 
@@ -136,108 +130,99 @@ const SignUp: React.FC = () => {
     ];
 
     return (
-        <div className="bg-cyan-bg">
-            <div className="w-6/12 m-auto pt-20 pb-20">
-                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-                    <div className="p-4 sm:p-12.5 xl:p-17.5">
-                        <div className="flex items-center justify-center">
-                            <div className="justify-center flex-col self-center flex items-center">
-                                <Image
-                                    width={150}
-                                    height={50}
-                                    src={"/images/logo/logo-icon.png"}
-                                    alt="Logo"
+        <div className="bg-cyan-bg min-h-screen flex items-center justify-center pt-4 pb-4">
+            <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg">
+                <div className="flex items-center justify-center mb-8">
+                    <Image
+                        width={150}
+                        height={50}
+                        src="/images/logo/logo-icon.png"
+                        alt="Logo"
+                    />
+                </div>
+                <h2 className="text-2xl font-bold text-center mb-8">Cadastre-se</h2>
+                <form onSubmit={handleSubmit}>
+                    {inputs.map((input) => (
+                        <div key={input.name} className="mb-4">
+                            <label
+                                htmlFor={input.name}
+                                className="mb-2 block font-medium text-gray-700"
+                            >
+                                {input.label}
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type={input.type}
+                                    placeholder={input.label}
+                                    name={input.name}
+                                    id={input.name}
+                                    value={formData[input.name as keyof typeof formData]}
+                                    onChange={handleChange}
+                                    max={input.name === "birth" ? getCurrentDate() : undefined}
+                                    className={`w-full rounded-lg border ${errors[input.name] ? 'border-red-500' : 'border-gray-300'} bg-transparent py-3 pl-10 pr-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100`}
+                                    aria-invalid={errors[input.name] ? "true" : "false"}
+                                    aria-describedby={`${input.name}-error`}
                                 />
-                                <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                                    Cadastre-se
-                                </h2>
+                                {errors[input.name] && (
+                                    <p id={`${input.name}-error`} className="text-red-500 text-sm mt-1">
+                                        {errors[input.name]}
+                                    </p>
+                                )}
+                                {input.type !== "date" && (
+                                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                        {React.createElement(input.icon, { className: "h-5 w-5" })}
+                                    </span>
+                                )}
                             </div>
                         </div>
+                    ))}
 
-                        <form onSubmit={handleSubmit}>
-                            {inputs.map((item) => (
-                                <div key={item.name} className="mb-4">
-                                    <label
-                                        htmlFor={item.name}
-                                        className="mb-2.5 block font-medium text-black dark:text-white"
-                                    >
-                                        {item.label}
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type={item.type}
-                                            placeholder={item.label}
-                                            name={item.name}
-                                            id={item.name}
-                                            value={formData[item.name as keyof typeof formData]}
-                                            onChange={handleChange}
-                                            max={item.name === "birth" ? getCurrentDate() : undefined}
-                                            className={`w-full rounded-lg border ${errors[item.name] ? 'border-red-500' : 'border-stroke'} bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary`}
-                                            aria-invalid={errors[item.name] ? "true" : "false"}
-                                            aria-describedby={`${item.name}-error`}
-                                        />
-                                        {errors[item.name] && (
-                                            <p id={`${item.name}-error`} className="text-red-500 text-sm mt-1">
-                                                {errors[item.name]}
-                                            </p>
-                                        )}
-                                        {item.type !== "date" &&
-                                            <span className="absolute right-4 top-4 text-stroke">
-                                                {React.createElement(item.icon, { className: "h-6 w-6 text-stroke" })}
-                                            </span>
-                                        }
-                                    </div>
-                                </div>
-                            ))}
+                    <FormControl component="fieldset" margin="normal">
+                        <FormLabel component="legend">Gênero</FormLabel>
+                        <RadioGroup
+                            name="gender"
+                            value={formData.gender}
+                            onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                        >
+                            <FormControlLabel
+                                value="Masculino"
+                                control={<Radio />}
+                                label="Masculino"
+                            />
+                            <FormControlLabel
+                                value="Feminino"
+                                control={<Radio />}
+                                label="Feminino"
+                            />
+                        </RadioGroup>
+                        {errors.gender && (
+                            <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+                        )}
+                    </FormControl>
 
-                            <FormControl component="fieldset" margin="normal">
-                                <FormLabel component="legend">Gênero</FormLabel>
-                                <RadioGroup
-                                    name="gender"
-                                    value={formData.gender}
-                                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                                >
-                                    <FormControlLabel
-                                        value="Masculino"
-                                        control={<Radio />}
-                                        label="Masculino"
-                                    />
-                                    <FormControlLabel
-                                        value="Feminino"
-                                        control={<Radio />}
-                                        label="Feminino"
-                                    />
-                                </RadioGroup>
-                                {errors.gender && (
-                                    <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
-                                )}
-                            </FormControl>
-
-                            <div className="mb-5">
-                                <button
-                                    type="submit"
-                                    className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 flex items-center justify-center"
-                                    disabled={loading}
-                                >
-                                    {loading ? (
-                                        <CircularProgress size={24} className="text-white" />
-                                    ) : (
-                                        "Criar conta"
-                                    )}
-                                </button>
-                            </div>
-
-                            <div className="mt-6 text-center">
-                                <p>
-                                    Já tem uma conta?{" "}
-                                    <Link href="/auth/signin" className="text-primary">
-                                        Entrar
-                                    </Link>
-                                </p>
-                            </div>
-                        </form>
+                    <div className="mb-6">
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600 transition flex items-center justify-center"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <CircularProgress size={24} className="text-white" />
+                            ) : (
+                                "Criar conta"
+                            )}
+                        </button>
                     </div>
-                </div>
+
+                    <div className="text-center text-sm text-gray-500">
+                        <p>
+                            Já tem uma conta?{" "}
+                            <Link href="/auth/signin" className="text-blue-500 hover:text-blue-600">
+                                Entrar
+                            </Link>
+                        </p>
+                    </div>
+                </form>
             </div>
         </div>
     );
