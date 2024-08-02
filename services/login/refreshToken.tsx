@@ -18,6 +18,7 @@ export const setupTokenRefresh = async () => {
         if (!refreshToken || !token) return;
 
         const tokens = await refreshAccessToken(refreshToken, token);
+        console.log('Tokens:', tokens);
         if (!tokens.success) throw new Error('Erro ao renovar o token');
 
         setToken(tokens.accessToken);

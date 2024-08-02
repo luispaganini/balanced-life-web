@@ -1,38 +1,14 @@
-import IUserInterface from "@/interfaces/User/IUserInterface";
-import { Package } from "@/types/package";
+"use client"
 
-const packageData: any[] = [
-    {
-        id: 1,
-        name: "Roberto",
-        price: 0.0,
-        invoiceDate: `Jan 13,2023`,
-        status: "Aprovado",
-    },
-    {
-        id: 2,
-        name: "Rogerio",
-        price: 59.0,
-        invoiceDate: `Jan 13,2023`,
-        status: "Rejeitado",
-    },
-    {
-        id: 3,
-        name: "Jonas",
-        price: 99.0,
-        invoiceDate: `Jan 13,2023`,
-        status: "Rejeitado",
-    },
-    {
-        id: 4,
-        name: "Matias",
-        price: 59.0,
-        invoiceDate: `Jan 13,2023`,
-        status: "Pendente",
-    },
-];
+import StatusNutritionistEnum from "@/enums/StatusNutritionistEnum";
+import IPatientInterface from "@/interfaces/User/IPatientInterface";
+type PatientsTableProps = {
+    patients: IPatientInterface[];
+};
 
-const TableThree = () => {
+const PatientsTable = (props: PatientsTableProps) => {
+
+
     return (
         <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <div className="max-w-full overflow-x-auto">
@@ -43,7 +19,7 @@ const TableThree = () => {
                                 Paciente
                             </th>
                             <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                                Ultima Refeição
+                                Idade
                             </th>
                             <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                 Status
@@ -54,29 +30,29 @@ const TableThree = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {packageData.map((packageItem, key) => (
+                        {props.patients.map((packageItem, key) => (
                             <tr key={key}>
                                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                     <h5 className="font-medium text-black dark:text-white">
                                         {packageItem.name}
                                     </h5>
-                                    <p className="text-sm">${packageItem.price}</p>
                                 </td>
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                     <p className="text-black dark:text-white">
-                                        {packageItem.invoiceDate}
+                                        {packageItem.age}
                                     </p>
                                 </td>
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                     <p
-                                        className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${packageItem.status === "Aprovado"
+                                        className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
+                                            packageItem.linkStatus === StatusNutritionistEnum.Accepted
                                                 ? "text-success bg-success"
-                                                : packageItem.status === "Rejeitado"
+                                                : packageItem.linkStatus === StatusNutritionistEnum.Rejected
                                                     ? "text-danger bg-danger"
                                                     : "text-warning bg-warning"
                                             }`}
                                     >
-                                        {packageItem.status}
+                                        {packageItem.linkStatus == StatusNutritionistEnum.Accepted ? "Aceito" : packageItem.linkStatus == StatusNutritionistEnum.Rejected ? "Rejeitado" : "Pendente"}
                                     </p>
                                 </td>
                                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -157,4 +133,4 @@ const TableThree = () => {
     );
 };
 
-export default TableThree;
+export default PatientsTable;
