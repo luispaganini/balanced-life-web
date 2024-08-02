@@ -55,7 +55,7 @@ const Sidebar = ({}: SidebarProps) => {
           />
           {isSidebarOpen && (
             <h1 className=" ml-2 text-xl font-semibold text-white">
-              ShakibAdmin
+              Balanced Life
             </h1>
           )}
         </Link>
@@ -84,7 +84,7 @@ const Sidebar = ({}: SidebarProps) => {
                   <LinkItem
                     icon={<ShoppingBag />}
                     title="E-commerce"
-                    href="/"
+                    href="/dashboard/"
                   />
                 </ExpandMenu>
               </li>
@@ -94,15 +94,15 @@ const Sidebar = ({}: SidebarProps) => {
               <li>
                 <LinkItem
                   title="Calendar"
-                  href="/calendar"
+                  href="/dashboard/calendar"
                   icon={<Calendar className="h-6 w-6" />}
                 ></LinkItem>
               </li>
 
               <li>
                 <LinkItem
-                  title="Tables"
-                  href="/tables"
+                  title="Pacientes"
+                  href="/dashboard/patients"
                   icon={<Table2Icon className="h-6 w-6" />}
                 ></LinkItem>
               </li>
@@ -113,7 +113,7 @@ const Sidebar = ({}: SidebarProps) => {
               <li>
                 <LinkItem
                   title="Settings"
-                  href="/settings"
+                  href="/dashboard/settings"
                   icon={<Settings className="h-6 w-6" />}
                 ></LinkItem>
               </li>
@@ -122,7 +122,7 @@ const Sidebar = ({}: SidebarProps) => {
               <li>
                 <LinkItem
                   title="Profile"
-                  href="/profile"
+                  href="/dashboard/profile"
                   icon={<User2Icon className="h-6 w-6" />}
                 ></LinkItem>
               </li>
@@ -131,7 +131,7 @@ const Sidebar = ({}: SidebarProps) => {
               <li>
                 <LinkItem
                   title="Charts"
-                  href="/chart"
+                  href="/dashboard/chart"
                   icon={<BarChart2 className="h-6 w-6" />}
                 ></LinkItem>
               </li>
@@ -145,12 +145,12 @@ const Sidebar = ({}: SidebarProps) => {
                 <ExpandMenu icon={<Component className="h-6 w-6" />} name="UI">
                   <LinkItem
                     title="Alerts"
-                    href="/ui/alerts"
+                    href="/dashboard/ui/alerts"
                     icon={<AlertCircle className="h-5 w-5" />}
                   ></LinkItem>
                   <LinkItem
                     title="Buttons"
-                    href="/ui/buttons"
+                    href="/dashboard/ui/buttons"
                     icon={<MousePointerClick className="h-5 w-5" />}
                   />
                 </ExpandMenu>
