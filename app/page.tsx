@@ -1,4 +1,4 @@
-
+"use client"
 import Features from '@/components/LandingPage/Features'
 import Footer from '@/components/LandingPage/Footer'
 import Header from '@/components/LandingPage/Header'

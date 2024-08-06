@@ -1,15 +1,16 @@
-"use client";
+"use client"
 
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { UserIcon, LockClosedIcon } from '@heroicons/react/24/outline';
-import { login, loginVerifyCPF } from "@/services/login/login";
-import useAuthStore from "@/store/authStore";
-import { formatCPF, validateCPF } from "@/utils/User/user";
-import UserRoleEnum from "@/enums/UserRoleEnum";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
+import { formatCPF, validateCPF } from "@/utils/User/user";
+import { login, loginVerifyCPF } from "@/services/login/login";
+import UserRoleEnum from "@/enums/UserRoleEnum";
+import useAuthStore from "@/store/authStore";
 
 const SignIn: React.FC = () => {
     const router = useRouter();
@@ -52,9 +53,7 @@ const SignIn: React.FC = () => {
         return newErrors;
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
+    const handleSubmit = async () => {
         const validationErrors = validateForm();
 
         if (Object.keys(validationErrors).length > 0) {
@@ -64,33 +63,43 @@ const SignIn: React.FC = () => {
         setLoading(true);
 
         try {
-            const response = await login(formData.cpf, formData.password);
-            if (response) {
-                const user = await loginVerifyCPF(formData.cpf);
-                if (user) {
-                    if (user.userRole && user.userRole.id == UserRoleEnum.Nutricionist)
-                        authStore.setUser(user);
-                    else {
-                        alert("Usuario não autorizado!\nEste site é apenas para Nutricionistas.");
-                        return;
-                    }
-                }
+            // const response = await login(formData.cpf, formData.password);
+            // if (response) {
+            //     const user = await loginVerifyCPF(formData.cpf);
+            //     if (user) {
+            //         if (user.userRole && user.userRole.id == UserRoleEnum.Nutricionist) {
+            //             authStore.setUser(user);
+            //             authStore.setRefreshToken(response.accessToken)
+            //             authStore.setToken(response.accessToken)
+            //             router.push("/dashboard");
 
-                authStore.setToken(response.accessToken);
-                authStore.setRefreshToken(response.refreshToken);
+            //         }
+            //         else {
+            //             alert("Usuario não autorizado!\nEste site é apenas para Nutricionistas.");
+            //             return;
+            //         }
+            //     }
+            const result = await signIn("credentials", {
+                redirect: false,
+                callbackUrl: "/dashboard",
+                cpf: formData.cpf,
+                password: formData.password,
+            });
+
+            if (!result?.ok)
+                throw new Error(result?.error);
+
+            if (result?.error == null)
                 router.push("/dashboard");
+            else
+                alert('Informações inválidas.');
 
-            } else {
-                alert("Usuário ou senha inválidos.");
-            }
         } catch (error) {
-            console.error(error)
-            alert("Erro ao fazer login.");
+            console.error(error);
+            alert("Erro ao processar a solicitação.");
         } finally {
             setLoading(false);
         }
-        console.log("CPF:", formData.cpf);
-        console.log("Senha:", formData.password);
     };
 
     const inputs = [
@@ -112,7 +121,7 @@ const SignIn: React.FC = () => {
                     <h2 className="text-2xl font-bold text-black mb-2">Login</h2>
                 </div>
 
-                <form onSubmit={handleSubmit}>
+                <form action={handleSubmit}>
                     {inputs.map((input) => (
                         <div key={input.name} className="mb-4">
                             <label

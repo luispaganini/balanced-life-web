@@ -7,6 +7,8 @@ import Loader from "@/components/common/Loader";
 
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Header from "@/components/Header";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { auth } from "@/auth";
 
 export default function RootLayout({
   children,

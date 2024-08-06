@@ -1,11 +1,12 @@
+import { auth } from "@/auth";
 import ECommerce from "@/components/Dashboard/E-commerce";
-import { Metadata } from "next";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Dashboard - Balanced Life",
-};
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await auth()
+
   return (
     <>
       <ECommerce />
